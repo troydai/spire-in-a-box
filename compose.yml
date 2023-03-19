@@ -1,0 +1,10 @@
+version: '3.7'
+services:
+  spire-server:
+    image: spire-in-a-box-main:latest
+    ports:
+      - "8081:8081"
+  workload:
+    image: spire-in-a-box-workload:latest
+    ports:
+      - "8080:8080"
