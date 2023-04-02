@@ -8,3 +8,5 @@ services:
     image: spire-in-a-box-workload:latest
     ports:
       - "8080:8080"
+    depends_on:
+      - spire-server
