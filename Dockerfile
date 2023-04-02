@@ -1,3 +1,11 @@
+FROM alpine:3.17 as keygen
+
+RUN apk add --no-cache openssl
+
+WORKDIR /workspace
+COPY scripts/keys/ ./
+RUN rm -rf .data && mkdir .data && ./gen.sh
+
 FROM spire-builder:v1.6.1 as builder
 
 FROM alpine:3.17 as spire-base
@@ -13,9 +21,9 @@ ENTRYPOINT [ "/opt/spire/bin/spire-server", "run" ]
 
 COPY --from=builder /spireserverroot /
 COPY --from=builder /spire/bin/static/spire-server bin/
+COPY --from=keygen /workspace/.data/root.crt conf/server/root_ca.crt
+COPY --from=keygen /workspace/.data/root.key conf/server/root_ca.key
 COPY ./config/server.conf conf/server/server.conf
-COPY spire/conf/server/dummy_upstream_ca.crt conf/server/
-COPY spire/conf/server/dummy_upstream_ca.key conf/server/
 
 FROM golang:1.20.1-alpine3.17 as workload
 
@@ -25,8 +33,8 @@ USER 1000
 
 WORKDIR /opt/spire
 COPY --from=builder /spire/bin/static/spire-agent bin/
+COPY --from=keygen /workspace/.data/root.crt conf/agent/root_ca.crt
 COPY ./config/agent.conf conf/agent/agent.conf
-COPY spire/conf/agent/dummy_root_ca.crt conf/agent/
 
 EXPOSE 8080
 
