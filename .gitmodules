@@ -1,3 +1,0 @@
-[submodule "spire"]
-	path = spire
-	url = https://github.com/spiffe/spire.git
