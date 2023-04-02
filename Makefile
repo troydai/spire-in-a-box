@@ -20,7 +20,3 @@ build-spire:
 		--build-arg BUILDPLATFORM=$(BUILD_PLATFORM) \
 		-t spire-builder:$(SPIRE_VERSION) \
 		.
-
-join-token:
-	@ docker-compose exec spire-server /opt/spire/bin/spire-server token generate \
-		-spiffeID spiffe://spire-in-a-box.troydai.cc/agent
