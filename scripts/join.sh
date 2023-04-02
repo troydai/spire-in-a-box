@@ -5,11 +5,11 @@
 TRUST_DOMAIN=spire-in-a-box.troydai.cc
 
 # execute token generate command on the spire server container
-TOKEN=`docker-compose exec spire-server /opt/spire/bin/spire-server token generate \
-    -spiffeID spiffe://$TRUST_DOMAIN/host -output json | jq -r .value`
+# TOKEN=`docker-compose exec spire-server /opt/spire/bin/spire-server token generate \
+#     -spiffeID spiffe://$TRUST_DOMAIN/host -output json | jq -r .value`
 
 # start the spire agent on the workload container with the generated token
-docker-compose exec -d workload /opt/spire/bin/spire-agent run -joinToken $TOKEN 
+docker-compose exec -d workload /opt/spire/bin/spire-agent run # -joinToken $TOKEN 
 
 # create an entry for the workload container
 docker-compose exec spire-server /opt/spire/bin/spire-server entry create \
